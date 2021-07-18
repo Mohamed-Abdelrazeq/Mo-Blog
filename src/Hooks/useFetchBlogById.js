@@ -8,7 +8,7 @@ const useFetchBlogById = (id) => {
     useEffect( () => {
 
         async function fetchBlogById(){
-            var db = firebase.firestore();
+            const db = firebase.firestore();
             const collection = db.collection("blogs");
             const blog = (await collection.doc(id).get()).data();
                 

@@ -10,7 +10,7 @@ const useFetch = () => {
       async function fetchAllBlogs(){
         
         var blogs = [];
-        var db = firebase.firestore();
+        const db = firebase.firestore();
         const collection = await db.collection("blogs").get();
         
         collection.forEach(
