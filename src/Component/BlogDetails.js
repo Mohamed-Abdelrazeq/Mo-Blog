@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import useFetch from "../Hooks/useFetch";
+import useFetchBlogById from "../Hooks/useFetchBlogById";
 import { useHistory } from 'react-router-dom';
 
 const BlogDatails = () => {
     const { id } = useParams();
-    const { data:blog, isPending} = useFetch("http://localhost:8000/blogs/" + id);
+    const { data:blog, isPending} = useFetchBlogById(id);
     const history = useHistory();
 
     const handleClick = () => {

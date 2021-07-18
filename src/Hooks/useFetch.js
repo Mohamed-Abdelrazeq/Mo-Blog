@@ -1,34 +1,34 @@
 import { useState , useEffect } from "react";
+import firebase from 'firebase';
 
-const useFetch = (url) => {
+const useFetch = () => {
     const [data, setData] = useState(null)
     const [isPending, setIsPending] = useState(true);
 
     useEffect(() => {
 
-        const abortCont = new AbortController();
+      async function fetchAllBlogs(){
+        
+        var blogs = [];
+        var db = firebase.firestore();
+        const collection = await db.collection("blogs").get();
+        
+        collection.forEach(
+          (blog)=>{
+            var myblog = blog.data();
+            myblog['id'] = blog.id;
+            blogs.push(myblog);
+          }
+        );
+        
+        setData(blogs);
+        setIsPending(false);
+      
+      }
 
-
-        fetch(url , {signal : abortCont.signal})
-        .then(result => {
-          return result.json();
-          }).catch(
-              err => {
-                console.log("Server Problem");
-              }
-          )
-          .then(data => {
-              setData(data);
-              setIsPending(false);
-          }).catch(err => {
-              if(err === 'AbortError'){
-                console.log("Fetch Abort");
-              }
-              console.log("Data Error");
-          })
-
-          return () => abortCont.abort();
-      },[url]);
+      fetchAllBlogs();
+          
+      },[]);
 
       return {data , isPending}
 
