@@ -1,32 +1,40 @@
 import { useParams } from "react-router-dom";
 import useFetchBlogById from "../Hooks/useFetchBlogById";
 import { useHistory } from 'react-router-dom';
+import firebase from 'firebase';
+import { useState } from "react";
 
 const BlogDatails = () => {
     const { id } = useParams();
     const { data:blog, isPending} = useFetchBlogById(id);
+    const [ isDeleting, setIsDeleting ] = useState(false);
     const history = useHistory();
 
-    const handleClick = () => {
-        fetch('http://localhost:8000/blogs/' + blog.id, {
-          method: 'DELETE'
-        }).then(() => {
-          history.push('/');
-        }) 
-      }
+    const handleClick = async () => {
+        
+      setIsDeleting(true);
+
+      const db = firebase.firestore();
+
+      await db.collection("blogs").doc(id).delete();
+      
+      history.push('/');
+      setIsDeleting(false);
+
+    }
     
     return ( 
         <div className="blog-details">
-            {isPending && <div>Loading...</div> }
-            {blog && (
-                <article>
-                    <h2>{ blog.title }</h2>
-                    <p>Written by { blog.author } </p>
-                    <div> {blog.body} </div>
-                    <button onClick={handleClick}>delete</button>
-                </article>
-            )}
-
+          {isDeleting && <div>deleting...</div> }
+          {!isDeleting && isPending && <div>Loading...</div> }
+          {!isDeleting && blog && (
+              <article>
+                  <h2>{ blog.title }</h2>
+                  <p>Written by { blog.author } </p>
+                  <div> {blog.body} </div>
+                  <button onClick={handleClick}>delete</button>
+              </article>
+          )}
         </div>
      );
 }
