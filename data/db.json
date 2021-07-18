@@ -11,6 +11,12 @@
       "body": "Go Home",
       "author": "A Web Developer",
       "id": 5
+    },
+    {
+      "title": "Delpoyment",
+      "body": "I deployed this app using firebase hosting and the next step is to connect it with realtime database cause I can't run the db server all the time ",
+      "author": "A Web Developer",
+      "id": 6
     }
   ]
 }
